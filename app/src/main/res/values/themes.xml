@@ -14,7 +14,12 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->>
     </style>
+    <style name="expandedBarTextStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">0sp</item>
+        <item name="android:textColor">@android:color/transparent</item>
 
+    </style>
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_light</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>

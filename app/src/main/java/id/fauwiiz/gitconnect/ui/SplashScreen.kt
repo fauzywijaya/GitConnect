@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import id.fauwiiz.gitconnect.ui.main.MainActivity
 
 
 @SuppressLint("CustomSplashScreen")
@@ -16,6 +17,10 @@ class SplashScreen : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finishAffinity()
-        }, 2000)
+        }, timer)
+    }
+
+    companion object{
+        const val timer = 2000L
     }
 }
