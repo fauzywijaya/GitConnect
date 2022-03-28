@@ -83,7 +83,6 @@ class DetailFragment : Fragment() {
                 FancyToast.LENGTH_LONG,
                 FancyToast.ERROR, true
             ).show()
-            showError(true)
             val action = DetailFragmentDirections.actionDetailFragmentToHomeFragment()
             findNavController().navigate(action)
 
@@ -162,14 +161,8 @@ class DetailFragment : Fragment() {
         binding.loadingDetail.isVisible = state
         binding.appBarLayout.isVisible = !state
         binding.coordinatorLayout.isVisible = !state
-        binding.tvError.isVisible = !state
     }
-    private fun showError(state: Boolean) {
-        binding.tvError.isVisible = state
-        binding.loadingDetail.isVisible = !state
-        binding.appBarLayout.isVisible = !state
-        binding.coordinatorLayout.isVisible = !state
-    }
+
     companion object {
         lateinit var USERNAME: String
         private val TAB_TITLES = intArrayOf(

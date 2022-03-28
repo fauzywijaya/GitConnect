@@ -14,6 +14,9 @@ import id.fauwiiz.gitconnect.data.remote.response.User
 import id.fauwiiz.gitconnect.databinding.FragmentHomeBinding
 import id.fauwiiz.gitconnect.ui.adapter.UserAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
@@ -63,6 +66,7 @@ class HomeFragment : Fragment() {
                 ).show()
             }
 
+            binding.tvGreet.text = grettingMessage()
         }
     }
     private fun initSearchUser(){
@@ -124,6 +128,21 @@ class HomeFragment : Fragment() {
             else -> binding.empty.visibility = View.INVISIBLE
         }
     }
+
+    fun grettingMessage(): String{
+
+        val calendar = Calendar.getInstance()
+        val timeOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+
+
+        return when (timeOfDay){
+            in 0..11 -> "Selamat Pagi, Dicoding"
+            in 12..18 -> "Selamat Sore, Dicoding"
+            in 18..23 -> "Selamat Malam, Dicoding"
+            else -> "Hello"
+        }
+    }
+
 
     private fun showLoading(state: Boolean){
         when(state){

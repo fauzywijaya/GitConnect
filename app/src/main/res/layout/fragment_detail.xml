@@ -298,19 +298,5 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-        <TextView
-            android:id="@+id/tv_error"
-            android:visibility="gone"
-            android:drawablePadding="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/TextStyle.SubTitle"
-            android:text="@string/cannot_load_the_content"
-            app:drawableTopCompat="@drawable/not_found" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,35 +9,37 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
+        android:background="@color/blue_primary"
         app:elevation="1dp"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue_primary"
+            app:statusBarScrim="@color/blue_primary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:expandedTitleTextAppearance="@style/expandedBarTextStyle"
             app:title="@string/app_name">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="230dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="70dp"
-                    android:textColor="@color/gray_200"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/white"
                     android:text="@string/find_amazing_developer_around_you"
                     style="@style/TextStyle.AppName"/>
                 <TextView
+                    android:id="@+id/tv_greet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/desert_storm_500"
+                    android:textColor="@color/white"
                     style="@style/TextStyle.Title.Regular"
                     android:text="@string/good_morning_dicoding"
                     />
@@ -46,14 +48,10 @@
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginVertical="20dp"
                     android:background="@drawable/shape_search"
                     />
             </LinearLayout>
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
