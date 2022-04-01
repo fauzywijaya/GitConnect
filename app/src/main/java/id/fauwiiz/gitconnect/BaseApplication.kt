@@ -2,6 +2,7 @@ package id.fauwiiz.gitconnect
 
 import android.app.Application
 import id.fauwiiz.gitconnect.di.apiModule
+import id.fauwiiz.gitconnect.di.databaseModule
 import id.fauwiiz.gitconnect.di.repositoryModule
 import id.fauwiiz.gitconnect.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -19,6 +20,7 @@ class BaseApplication : Application(){
                 listOf(
                     apiModule,
                     repositoryModule,
+                    databaseModule,
                     viewModelModule
                 )
 

@@ -32,22 +32,24 @@ class FollowerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showLoading(true)
+        if (activity != null){
+            showLoading(true)
 
-        followerViewModel.getFollowers(DetailFragment.USERNAME)
+            followerViewModel.getFollowers(DetailFragment.USERNAME)
 
-        followerViewModel.listFollower.observe(viewLifecycleOwner){
-            showLoading(false)
-            if (!it.isNullOrEmpty()){
-                setUpRecyclerView(it)
-                showNoData(false)
-            }else{
-                showNoData(true)
+            followerViewModel.listFollower.observe(viewLifecycleOwner){
+                showLoading(false)
+                if (!it.isNullOrEmpty()){
+                    setUpRecyclerView(it)
+                    showNoData(false)
+                }else{
+                    showNoData(true)
+                }
             }
         }
     }
 
-    private fun setUpRecyclerView(data: ArrayList<User>) {
+    private fun setUpRecyclerView(data: List<User>) {
         userAdapter = UserAdapter()
         userAdapter.setFragment(this::class.java.simpleName)
         userAdapter.setData(data)

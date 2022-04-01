@@ -3,9 +3,12 @@ package id.fauwiiz.gitconnect.utils
 import androidx.recyclerview.widget.DiffUtil
 import id.fauwiiz.gitconnect.data.remote.response.User
 
-class UserDiffCallback (private val oldList: ArrayList<User>, private val newList: ArrayList<User>) :
-    DiffUtil.Callback() {
-    override fun getOldListSize(): Int  = oldList.size
+class UserDiffCallback(
+    private val oldList: List<User>,
+    private val newList: List<User>
+): DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
 

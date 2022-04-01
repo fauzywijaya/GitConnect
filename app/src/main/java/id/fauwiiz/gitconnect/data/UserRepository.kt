@@ -1,5 +1,8 @@
 package id.fauwiiz.gitconnect.data
 
+import androidx.lifecycle.LiveData
+import id.fauwiiz.gitconnect.data.local.LocalDataSource
+import id.fauwiiz.gitconnect.data.local.entity.UserEntity
 import id.fauwiiz.gitconnect.data.remote.ApiHandler.ErrorResult
 import id.fauwiiz.gitconnect.data.remote.ApiResponse
 import id.fauwiiz.gitconnect.data.remote.ApiService
@@ -9,7 +12,7 @@ import id.fauwiiz.gitconnect.data.remote.response.SearchResponse
 import id.fauwiiz.gitconnect.data.remote.response.User
 import java.lang.Exception
 
-class UserRepository (private val remote: ApiService) : UserDataSource {
+class UserRepository (private val remote: ApiService, private val local: LocalDataSource) : UserDataSource {
     override suspend fun getSearchUser(username: String): ApiResponse<SearchResponse> {
         return try {
             val response = remote.getSearchUsers(username)
@@ -36,7 +39,7 @@ class UserRepository (private val remote: ApiService) : UserDataSource {
         }
     }
 
-    override suspend fun getUserFollowers(username: String): ApiResponse<ArrayList<User>> {
+    override suspend fun getUserFollowers(username: String): ApiResponse<List<User>> {
         return try {
             val response = remote.getUserFollowers(username)
             if (response.isSuccessful){
@@ -49,7 +52,7 @@ class UserRepository (private val remote: ApiService) : UserDataSource {
         }
     }
 
-    override suspend fun getUserFollowing(username: String): ApiResponse<ArrayList<User>> {
+    override suspend fun getUserFollowing(username: String): ApiResponse<List<User>> {
         return try {
             val response = remote.getUserFollowings(username)
             if (response.isSuccessful) {
@@ -61,5 +64,13 @@ class UserRepository (private val remote: ApiService) : UserDataSource {
             ApiResponse.Error(e)
         }
     }
+
+    override fun getListUserFavorite(): LiveData<List<UserEntity>> = local.getListUserFavorite()
+
+    override fun searchFavorite(username: String): LiveData<UserEntity> = local.searchFavorite(username)
+
+    override suspend fun insertFavorite(userEntity: UserEntity) = local.insertFavorite(userEntity)
+
+    override suspend fun deleteFavorite(username: String) = local.delete(username)
 
 }

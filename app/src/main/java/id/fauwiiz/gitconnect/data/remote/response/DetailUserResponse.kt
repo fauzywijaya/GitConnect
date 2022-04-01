@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName
 data class DetailUserResponse(
     @field:SerializedName("id")
     val id: Int,
-    @field:SerializedName("name")
-    val name: String?,
     @field:SerializedName("login")
     val username: String,
+    @field:SerializedName("name")
+    val name: String?,
     @field:SerializedName("location")
     val location: String?,
     @field:SerializedName("public_repos")
-    val publicRepos: String,
+    val publicRepos: Int,
     @field:SerializedName("company")
     val company: String?,
     @field:SerializedName("followers")

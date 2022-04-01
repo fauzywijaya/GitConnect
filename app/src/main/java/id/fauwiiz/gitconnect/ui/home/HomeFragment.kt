@@ -16,7 +16,7 @@ import id.fauwiiz.gitconnect.ui.adapter.UserAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.collections.List
 
 
 class HomeFragment : Fragment() {
@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
-    private fun setUpRecyclerView(data: ArrayList<User>) {
+    private fun setUpRecyclerView(data: List<User>) {
         userAdapter = UserAdapter()
         userAdapter.setFragment(this::class.java.simpleName)
         userAdapter.setData(data)

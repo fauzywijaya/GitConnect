@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GitConnect">
         <activity
-            android:name=".ui.SplashScreen"
+            android:name=".ui.splash.SplashScreen"
             android:exported="true"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>

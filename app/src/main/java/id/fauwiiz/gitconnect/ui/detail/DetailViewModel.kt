@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.fauwiiz.gitconnect.data.UserDataSource
+import id.fauwiiz.gitconnect.data.local.entity.UserEntity
 import id.fauwiiz.gitconnect.data.remote.ApiResponse
 import id.fauwiiz.gitconnect.data.remote.response.DetailUserResponse
 import id.fauwiiz.gitconnect.data.remote.response.User
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: UserDataSource) : ViewModel() {
     var errorMessage : MutableLiveData<String> = MutableLiveData()
+    var status: MutableLiveData<Boolean> = MutableLiveData()
 
     private var _loading: MutableLiveData<Boolean> = MutableLiveData()
     val loading: LiveData<Boolean> get() = _loading
@@ -33,8 +35,8 @@ class DetailViewModel(private val repository: UserDataSource) : ViewModel() {
         }
     }
 
-    private var followers: MutableLiveData<ArrayList<User>> = MutableLiveData()
-    val listFollower: LiveData<ArrayList<User>> get() = followers
+    private var followers: MutableLiveData<List<User>> = MutableLiveData()
+    val listFollower: LiveData<List<User>> get() = followers
 
     fun getFollowers(username: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,8 +51,8 @@ class DetailViewModel(private val repository: UserDataSource) : ViewModel() {
         }
     }
 
-    private var following: MutableLiveData<ArrayList<User>> = MutableLiveData()
-    val listFollowing: LiveData<ArrayList<User>> get() = following
+    private var following: MutableLiveData<List<User>> = MutableLiveData()
+    val listFollowing: LiveData<List<User>> get() = following
     fun getFollowing(username: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.postValue(true)
@@ -87,5 +89,23 @@ class DetailViewModel(private val repository: UserDataSource) : ViewModel() {
             is ApiResponse.Error -> errorMessage.postValue(data.exception.message)
             is ApiResponse.Success -> _detail.postValue(data.data!!)
         }
+    }
+
+    fun insertFavorite(userEntity: UserEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertFavorite(userEntity)
+        }
+    }
+
+    fun deleteFavorite(query: String){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.deleteFavorite(query)
+        }
+    }
+
+    fun search(query: String) : LiveData<UserEntity> = repository.searchFavorite(query)
+
+    fun setStatus(state:Boolean) {
+        status.value = state
     }
 }

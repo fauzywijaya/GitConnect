@@ -3,18 +3,23 @@
     <string name="tagline">Find Your Connection</string>
     <string name="share">share</string>
     <string name="favorite">Favorite</string>
+    <string name="favorited">Favorited</string>
     <string name="followings">Followings</string>
     <string name="followers">Followers</string>
     <string name="repositories">Repository</string>
     <string name="details">Details</string>
     <string name="share_bt"> Hey, Go check out %s Profile on Github</string>
-    <string name="add_massage">Added to Favorite</string>
     <string name="user_not_founds">User Not Founds</string>
+    <string name="add_massage">Added to Favorite</string>
+    <string name="delete_message">Deleted From Favorite</string>
     <string name="find_your_connection">Find Your Connection</string>
     <string name="image_not_found">Image Not Found</string>
     <string name="open_profile">Open Profile</string>
-    <string name="find_amazing_developer_around_you">Find Amazing Developer Around You</string>
     <string name="good_morning_dicoding">Good Morning, Dicoding</string>
     <string name="image">image</string>
     <string name="cannot_load_the_content">Cannot Load the Content</string>
+    <string name="home">Home</string>
+    <string name="setting">Setting</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="find_amazing_developer_around_you">Find Amazing Developer Around You</string>
 </resources>

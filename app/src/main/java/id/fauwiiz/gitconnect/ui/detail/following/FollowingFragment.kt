@@ -34,23 +34,25 @@ class FollowingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (activity != null){
 
-        showLoading(true)
+            showLoading(true)
 
-        followingViewModel.getFollowing(DetailFragment.USERNAME)
+            followingViewModel.getFollowing(DetailFragment.USERNAME)
 
-        followingViewModel.listFollowing.observe(viewLifecycleOwner) {
-            showLoading(false)
-            if (!it.isNullOrEmpty()) {
-                setUpRecyclerView(it)
-                showNoData(false)
-            } else {
-                showNoData(true)
+            followingViewModel.listFollowing.observe(viewLifecycleOwner) {
+                showLoading(false)
+                if (!it.isNullOrEmpty()) {
+                    setUpRecyclerView(it)
+                    showNoData(false)
+                } else {
+                    showNoData(true)
+                }
             }
         }
     }
 
-    private fun setUpRecyclerView(data: ArrayList<User>) {
+    private fun setUpRecyclerView(data: List<User>) {
         userAdapter = UserAdapter()
         userAdapter.setFragment(this::class.java.simpleName)
         userAdapter.setData(data)

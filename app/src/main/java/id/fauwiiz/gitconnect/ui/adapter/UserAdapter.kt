@@ -1,11 +1,10 @@
 package id.fauwiiz.gitconnect.ui.adapter
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
+
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,15 +15,14 @@ import id.fauwiiz.gitconnect.ui.detail.DetailFragmentDirections
 import id.fauwiiz.gitconnect.ui.home.HomeFragmentDirections
 import id.fauwiiz.gitconnect.utils.UserDiffCallback
 
-class UserAdapter() : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     private var listUser = ArrayList<User>()
     private var fragmentName: String = ""
 
-    fun setData(data: ArrayList<User>){
+    fun setData(data: List<User>){
         val diffCallback = UserDiffCallback(listUser, data)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        listUser.clear()
         listUser.addAll(data)
         diffResult.dispatchUpdatesTo(this)
     }
@@ -44,11 +42,11 @@ class UserAdapter() : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
                 root.setOnClickListener{
 
                    if (nameFragment == "HomeFragment") {
-                       val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(user.username)
+                       val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetail(user.username)
                         it.findNavController().navigate(action)
                     }
                     else {
-                        val action = DetailFragmentDirections.actionDetailFragmentSelf(user.username)
+                        val action = DetailFragmentDirections.actionNavigationDetailSelf(user.username)
                         it.findNavController().navigate(action)
                     }
                 }

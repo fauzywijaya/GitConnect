@@ -1,6 +1,5 @@
 package id.fauwiiz.gitconnect.ui.detail
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,14 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialElevationScale
@@ -23,9 +19,9 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.shashank.sony.fancytoastlib.FancyToast
 import id.fauwiiz.gitconnect.R
 import id.fauwiiz.gitconnect.data.remote.response.DetailUserResponse
-import id.fauwiiz.gitconnect.data.remote.response.User
 import id.fauwiiz.gitconnect.databinding.FragmentDetailBinding
 import id.fauwiiz.gitconnect.ui.adapter.SectionPagerAdapter
+import id.fauwiiz.gitconnect.utils.DataMapper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.ln
 import kotlin.math.pow
@@ -41,8 +37,8 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        USERNAME = args.username
-        viewModel.getDetail(USERNAME)
+        viewModel.getDetail(args.username)
+        viewModel.setStatus(false)
 
 
         enterTransition = MaterialFadeThrough().apply {
@@ -60,48 +56,38 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _fragmentDetailBinding = FragmentDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (activity != null){
+            USERNAME = args.username
+            setFavorite(args.username)
 
+            viewModel.loading.observe(viewLifecycleOwner) { loading ->
+                showLoading(loading)
+            }
+            viewModel.detail.observe(viewLifecycleOwner) { data ->
+                populateDetail(data)
+                initFavoriteState(data)
+                profileUrl = data.htmlUrl
+            }
 
-        viewModel.loading.observe(viewLifecycleOwner) { loading ->
-            showLoading(loading)
-        }
-        viewModel.detail.observe(viewLifecycleOwner) { data ->
-            populateDetail(data)
-            profileUrl = data.htmlUrl
-        }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            FancyToast.makeText(
-                requireContext(), error,
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR, true
-            ).show()
-            val action = DetailFragmentDirections.actionDetailFragmentToHomeFragment()
-            findNavController().navigate(action)
-
-        }
-
-        binding.btFavorite.setOnClickListener {
-                val snackBar = Snackbar.make(
-                    it, R.string.add_massage,
-                    Snackbar.LENGTH_LONG
-                ).setAction("See", null)
-                snackBar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                val snackBarView = snackBar.view
-                snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.blue_secondary))
-                val textView = snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                snackBar.show()
+            viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+                FancyToast.makeText(
+                    requireContext(), error,
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR, true
+                ).show()
+                val action = DetailFragmentDirections.actionNavigationDetailToNavigationHome()
+                findNavController().navigate(action)
 
             }
-        val message = getString(R.string.share_bt, USERNAME)
+
+
+            val message = getString(R.string.share_bt, USERNAME)
             binding.ivShare.setOnClickListener {
                 val intent = Intent().apply {
                     action = Intent.ACTION_SEND
@@ -111,15 +97,16 @@ class DetailFragment : Fragment() {
                 val shareIntent = Intent.createChooser(intent, null)
                 startActivity(shareIntent)
             }
-        binding.ivBack.setOnClickListener {
-            val action = DetailFragmentDirections.actionDetailFragmentToHomeFragment()
-            findNavController().navigate(action)
-        }
-        binding.btShare.setOnClickListener {
-            Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(profileUrl)
-            }.also {
-                startActivity(it)
+            binding.ivBack.setOnClickListener {
+                val action = DetailFragmentDirections.actionNavigationDetailToNavigationHome()
+                findNavController().navigate(action)
+            }
+            binding.btShare.setOnClickListener {
+                Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(profileUrl)
+                }.also {
+                    startActivity(it)
+                }
             }
         }
     }
@@ -138,6 +125,42 @@ class DetailFragment : Fragment() {
                 .into(ivAvatar)
         }
         setUpViewPager()
+    }
+
+    private fun initFavoriteState(user: DetailUserResponse){
+        val data = DataMapper.responseToEntity(user)
+
+        viewModel.status.observe(viewLifecycleOwner) { state ->
+            if (state) {
+                binding.btFavorite.apply {
+                    text = getString(R.string.favorited)
+                    setBackgroundResource(R.drawable.button_primary)
+                    setOnClickListener {
+                        viewModel.deleteFavorite(args.username)
+                        viewModel.setStatus(false)
+                        FancyToast.makeText(
+                            context, getString(R.string.delete_message),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.SUCCESS, false
+                        ).show()
+
+                    }
+                }
+            } else {
+                binding.btFavorite.apply {
+                    setBackgroundResource(R.drawable.button_secondary)
+                    setOnClickListener {
+                        viewModel.insertFavorite(data)
+                        viewModel.setStatus(true)
+                        FancyToast.makeText(
+                            context, getString(R.string.add_massage),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.SUCCESS, false
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpViewPager() {
@@ -161,6 +184,17 @@ class DetailFragment : Fragment() {
         binding.loadingDetail.isVisible = state
         binding.appBarLayout.isVisible = !state
         binding.coordinatorLayout.isVisible = !state
+    }
+
+    private fun setFavorite(username: String){
+        viewModel.search(username).observe(viewLifecycleOwner){
+            viewModel.setStatus(it != null)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _fragmentDetailBinding
     }
 
     companion object {

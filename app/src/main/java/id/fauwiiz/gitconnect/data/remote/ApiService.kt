@@ -28,13 +28,13 @@ interface ApiService {
     @Headers("Authorization: token $GITHUB_TOKEN")
     suspend fun getUserFollowers(
         @Path("username") username: String
-    ) : Response<ArrayList<User>>
+    ) : Response<List<User>>
 
     @GET("users/{username}/following")
     @Headers("Authorization: token $GITHUB_TOKEN")
     suspend fun getUserFollowings(
         @Path("username") username: String
-    ) : Response<ArrayList<User>>
+    ) : Response<List<User>>
 
 
 }
